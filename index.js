@@ -6,6 +6,8 @@ import { makeExecutableSchema } from 'graphql-tools';
 import typeDefs from './schema';
 import resolvers from './resolvers';
 
+import models from './db/models';
+
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
@@ -20,7 +22,11 @@ app.use(
   }),
 );
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema, }));
+app.use(
+	'/graphql', 
+	bodyParser.json(), 
+	graphqlExpress({ schema, context: { models } })
+);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+app.listen(PORT, () => console.log('App running!'));
