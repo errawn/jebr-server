@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     	}
     },
     long: {
-    	type: DataTypes.INTEGER,
+    	type: DataTypes.DOUBLE,
     	allowNull: false,
     	validate: {
     		isFloat: true,
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     	}
     },
     lat: {
-    	type: DataTypes.INTEGER,
+    	type: DataTypes.DOUBLE,
     	allowNull: false,
     	validate: {
     		isFloat: true,
