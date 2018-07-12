@@ -1,5 +1,5 @@
 export default {
 	Query: {
-		hello: (parent, args, context) => 'hi!',
+		centers: (parent, args, { models }) => models.Center.findAll()
 	}
 }
