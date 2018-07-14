@@ -5,8 +5,4 @@ export default `
 		lat: Float!
 		long: Float!
 	}
-
-	type Query {
-		centers: [Centers!]!
-	}	
 `;
