@@ -1,35 +1,38 @@
 import express from 'express'
-import bodyParser from 'body-parser'
-import morgan from 'morgan'
 import cors from 'cors'
-// Graphql
-import { graphiqlExpress, graphqlExpress } from 'apollo-server-express'
-import { makeExecutableSchema } from 'graphql-tools'
-import typeDefs from './schema'
-import resolvers from './resolvers'
-// Db
+import morgan from 'morgan'
+import { ApolloServer, gql } from 'apollo-server-express'
+
+import path from 'path'
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
+
 import models from './db/models'
 
-const schema = makeExecutableSchema({
+const app = express()
+app.use(cors())
+app.use(morgan('dev'))
+
+const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')))
+const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')))
+
+const server = new ApolloServer({
+  // These will be defined for both new or existing servers
   typeDefs,
   resolvers,
-})
+  context: {
+    models,
+  },
+});
 
-const app = express()
-app.use(cors('*'))
-app.use(morgan('dev'))
-app.use(
-	'/graphql', 
-	bodyParser.json(), 
-	graphqlExpress({ schema, context: { models } })
-)
-// Use graphiql
-app.use(
-  '/graphiql',
-  graphiqlExpress({
-    endpointURL: '/graphql',
-  })
+server.applyMiddleware({ app }); // app is from an existing express app
+
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
 )
 
-const PORT = 3000
-app.listen(PORT, () => console.log('App running!'));
+
+
+
+
+
+
