@@ -1,5 +1,5 @@
 export default `
-	type Centers {
+	type Center {
 		id: ID
 		name: String!
 		lat: Float!
